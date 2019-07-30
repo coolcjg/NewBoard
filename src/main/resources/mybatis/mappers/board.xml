@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.board">
+
+ 
+	<resultMap id ="boardResult" type="boardVO">
+		<result property="level" column="level"/>
+		<result property="articleNO" column="articleNO"/>
+		<result property="parentNO" column="parentNO"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="writeDate" column="writeDate"/>
+		<result property="id" column="id"/>
+	</resultMap>
+	
+	
+	<select id="list" resultMap="boardResult">
+		<![CDATA[
+		select 
+		level, 
+		articleNO, 
+		parentNO, 
+		LPAD(' ', 4*(LEVEL-1)) || title title,
+		content,
+		writeDate,
+		id
+		from board
+		start with parentNO=0
+		CONNECT BY PRIOR articleNO = parentNO
+		ORDER SIBLINGS BY articleNO DESC
+		]]>
+	</select>
+	
+	
+	<insert id="create" parameterType="boardVO">
+		<![CDATA[insert into board(articleNO, parentNO, title, content, writeDate, id) values(seq_board.nextval, 0, #{title}, #{content}, SYSDATE, #{id})]]>
+	</insert>
+	 
+	<select id="read" parameterType="int" resultType="boardVO">
+		<![CDATA[select * from board where articleNO=#{articleNO}]]>
+	</select>
+	
+	<update id="mod" parameterType="boardVO">
+		<![CDATA[update board set title=#{title}, content=#{content} where articleNO=#{articleNO}]]>
+	</update>
+	
+	
+
+	
+	
+</mapper>
+
