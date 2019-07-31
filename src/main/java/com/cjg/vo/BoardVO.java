@@ -64,10 +64,5 @@ public class BoardVO {
 		return "BoardVO [articleNO=" + articleNO + ", parentNO=" + parentNO + ", title=" + title + ", content="
 				+ content + ", writeDate=" + writeDate + ", id=" + id + "]";
 	}
-	
-	
-	
-	
-	
 
 }

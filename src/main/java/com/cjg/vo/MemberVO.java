@@ -48,12 +48,5 @@ public class MemberVO {
 		return "Member [id=" + id + ", pwd=" + pwd + ", name=" + name + ", email=" + email + ", joinDate=" + joinDate
 				+ "]";
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }
