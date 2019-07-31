@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cjg.vo.BoardVO;
@@ -48,6 +49,17 @@ public class BoardController {
 	public ModelAndView create(HttpServletRequest request, HttpServletResponse response) throws Exception{
 				
 		ModelAndView mav = new ModelAndView("boardForm");
+		
+		String stringParentNO =  request.getParameter("parentNO");
+		int parentNO;
+		
+		if(stringParentNO != null)
+			parentNO = Integer.parseInt(stringParentNO);
+		else
+			parentNO = 0;
+		
+		mav.addObject("parentNO", parentNO);
+				
 		return mav;
 	}
 	
@@ -57,17 +69,16 @@ public class BoardController {
 		request.setCharacterEncoding("utf-8");
 		HttpSession session = request.getSession();
 		member = (MemberVO)session.getAttribute("member");
-
+			
+		int parentNO = Integer.parseInt(request.getParameter("parentNO"));
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		String id = member.getId();
 
+		boardVO.setParentNO(parentNO);
 		boardVO.setTitle(title);		
 		boardVO.setContent(content);
 		boardVO.setId(id);
-		boardVO.setParentNO(0);
-		
-		System.out.println(boardVO.toString());
 
 		int result = boardService.create(boardVO);
 		
@@ -94,37 +105,37 @@ public class BoardController {
 		return res;
 	}
 	
-	
 	@RequestMapping(value="/read/{articleNO}", method=RequestMethod.GET)
 	public ModelAndView read(@PathVariable int articleNO, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		boardVO = boardService.read(articleNO);
-		
-		System.out.println(boardVO.toString());
 		
 		ModelAndView mav = new ModelAndView("read");
 		mav.addObject("boardVO", boardVO);
 		
 		return mav;
-		
 	}
 	
 	@RequestMapping(value="/mod/{articleNO}", method=RequestMethod.GET)
 	public ModelAndView mod(@PathVariable int articleNO, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		boardVO = boardService.read(articleNO);
 		
-		System.out.println(boardVO.toString());
-		
 		ModelAndView mav = new ModelAndView("mod");
 		mav.addObject("boardVO", boardVO);
 		
 		return mav;
-		
 	}
 	
 	@RequestMapping(value="/modProcess.do", method=RequestMethod.POST)
-	public ModelAndView modProcess(BoardVO boardVO, HttpServletRequest request, HttpServletResponse response) throws Exception{
-		request.setCharacterEncoding("UTF-8");
-		System.out.println(boardVO.toString());
+	public ModelAndView modProcess(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		request.setCharacterEncoding("utf-8");
+		
+		int articleNO = Integer.parseInt(request.getParameter("articleNO"));
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		
+		boardVO.setArticleNO(articleNO);
+		boardVO.setTitle(title);
+		boardVO.setContent(content);
 		
 		int result = boardService.mod(boardVO);
 		
@@ -136,6 +147,17 @@ public class BoardController {
 			ModelAndView mav = new ModelAndView("redirect:/board/list.do");
 			return mav;
 		}
+	}
+	
+	@RequestMapping(value="del/{articleNO}", method=RequestMethod.GET)
+	public ModelAndView del(@PathVariable int articleNO, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		 
+		boardService.del(articleNO);
+		
+		ModelAndView mav = new ModelAndView("redirect:/board/list.do");
+		
+		return mav;
+
 	}
 	
 

@@ -75,15 +75,16 @@ public class MemberController {
 		
 		ModelAndView mav = new ModelAndView("redirect:/member/list.do");
 		return mav;
-
 	}
 	
 	@RequestMapping(value="/loginForm.do", method=RequestMethod.GET)
 	public ModelAndView loginForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		HttpSession session = request.getSession();
 		
-		session.setAttribute("redirectURI", request.getHeader("Referer"));
-		
+		//로그인 1번 실패 후 로그인 성공시 로그인폼으로 돌아가는것 방지.
+		if(!request.getHeader("Referer").equals("http://localhost:8080/pro1/member/loginForm.do"))
+			session.setAttribute("redirectURI", request.getHeader("Referer"));
+
 		return new ModelAndView("login");
 	}
 	
@@ -95,14 +96,17 @@ public class MemberController {
 		
 		String returnURI = (String)request.getSession().getAttribute("redirectURI");
 		System.out.println(returnURI);
+		
+		HttpSession session = request.getSession();
 				
 		if(member !=null){
-			HttpSession session = request.getSession();
 			session.setAttribute("member", member);
 			session.setAttribute("isLogOn", true);
+			session.setAttribute("loginFail", false);
 			mav.setViewName("redirect:"+returnURI);
 		}else{
-			mav.setViewName("redirect:/member/list.do");
+			session.setAttribute("loginFail", true);
+			mav.setViewName("redirect:/member/loginForm.do");
 		}
 		return mav;
 	}
@@ -128,6 +132,9 @@ public class MemberController {
 	
 	@RequestMapping(value="/modForm.do", method=RequestMethod.GET)
 	public ModelAndView modForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		HttpSession session = request.getSession();
+		session.setAttribute("redirectURI", request.getHeader("Referer"));
+		
 		ModelAndView mav = new ModelAndView("memberModForm");
 		return mav;
 	}
@@ -137,7 +144,8 @@ public class MemberController {
 	public ResponseEntity<String> modProcess(MultipartHttpServletRequest multipartRequest, MemberVO member1, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
 		HttpSession session = multipartRequest.getSession();
-
+		String redirectURI = (String)session.getAttribute("redirectURI");
+		
 		member = (MemberVO)session.getAttribute("member");
 		member1.setId(member.getId());
 		
@@ -150,9 +158,13 @@ public class MemberController {
 		
 		if(result == 1){
 			
+			session.removeAttribute("member");
+			member = memberService.login(member1);
+			session.setAttribute("member", member);
+			
 			msg ="<script>";
 			msg +="alert('회원정보가 수정되었습니다');";
-			msg +="location.href='"+request.getContextPath()+"/member/list.do';";
+			msg +="location.href='"+redirectURI+"';";
 			msg +="</script>";
 			
 			res = new ResponseEntity<String>(msg, responseHeaders, HttpStatus.OK);
@@ -183,7 +195,6 @@ public class MemberController {
 		header.add("Content-Type", "text/html; charset=utf-8");
 		String msg;
 		
-		
 		if(result==1){
 			session.removeAttribute("member");
 			session.removeAttribute("isLogOn");
@@ -191,8 +202,6 @@ public class MemberController {
 			msg+="alert('회원탈퇴 완료');";
 			msg+="location.href='"+request.getContextPath()+"/member/list.do';";
 			msg+="</script>";
-			
-			
 			
 		}else{
 			msg="<script>";
@@ -203,6 +212,5 @@ public class MemberController {
 		res = new ResponseEntity<String>(msg, header, HttpStatus.OK);
 		
 		return res;
-		
 	}
 }

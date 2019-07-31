@@ -3,20 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.board">
-
  
-	<resultMap id ="boardResult" type="boardVO">
-		<result property="level" column="level"/>
-		<result property="articleNO" column="articleNO"/>
-		<result property="parentNO" column="parentNO"/>
-		<result property="title" column="title"/>
-		<result property="content" column="content"/>
-		<result property="writeDate" column="writeDate"/>
-		<result property="id" column="id"/>
-	</resultMap>
-	
-	
-	<select id="list" resultMap="boardResult">
+	<select id="list" resultType="boardVO">
 		<![CDATA[
 		select 
 		level, 
@@ -33,22 +21,21 @@
 		]]>
 	</select>
 	
-	
 	<insert id="create" parameterType="boardVO">
-		<![CDATA[insert into board(articleNO, parentNO, title, content, writeDate, id) values(seq_board.nextval, 0, #{title}, #{content}, SYSDATE, #{id})]]>
+		<![CDATA[insert into board(articleNO, parentNO, title, content, writeDate, id) values(seq_board.nextval, #{parentNO}, #{title}, #{content}, SYSDATE, #{id})]]>
 	</insert>
 	 
 	<select id="read" parameterType="int" resultType="boardVO">
 		<![CDATA[select * from board where articleNO=#{articleNO}]]>
 	</select>
-	
+
 	<update id="mod" parameterType="boardVO">
 		<![CDATA[update board set title=#{title}, content=#{content} where articleNO=#{articleNO}]]>
 	</update>
-	
-	
 
-	
+	<delete id="del" parameterType="int">
+		<![CDATA[delete from board where articleNO=#{articleNO}]]>
+	</delete>
 	
 </mapper>
 

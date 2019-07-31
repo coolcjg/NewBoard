@@ -30,5 +30,9 @@ public class BoardService {
 	public int mod(BoardVO boardVO) throws Exception{
 		return boardDAO.mod(boardVO);
 	}
-
+	
+	public int del(int articleNO) throws Exception{
+		return boardDAO.del(articleNO);
+	}
+	
 }

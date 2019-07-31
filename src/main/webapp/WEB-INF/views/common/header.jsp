@@ -4,8 +4,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
-
-
 <c:choose>
 	<c:when test="${isLogOn==true && member!=null}">
 		${member.name}님이 로그인중입니다.
@@ -20,6 +18,7 @@
 	</c:otherwise>
 </c:choose>
 
-	<a href="${contextPath}/board/list.do">게시글 보러가기</a>
- 
+<a href="${contextPath}/board/list.do">게시글 보러가기</a>
+<a href="${contextPath}/member/list.do">회원리스트</a>
+
 <hr>

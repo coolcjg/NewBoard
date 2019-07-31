@@ -10,14 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import com.cjg.vo.MemberVO;
 
-
 @Repository("memberDAO")
 public class MemberDAO {
 	
 	@Autowired
 	SqlSession sqlSession;
-	
-	
 	
 	public List memberList() throws Exception{
 		 List memberlist = sqlSession.selectList("mapper.member.memberList");
@@ -40,5 +37,4 @@ public class MemberDAO {
 		return sqlSession.delete("mapper.member.delete", id);
 	}
 	
-
 }

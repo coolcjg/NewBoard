@@ -29,5 +29,9 @@ public class BoardDAO {
 	public int mod(BoardVO boardVO) throws Exception{
 		return sqlSession.update("mapper.board.mod", boardVO);
 	}
+	
+	public int del(int articleNO) throws Exception{
+		return sqlSession.delete("mapper.board.del", articleNO);
+	}
 
 }
