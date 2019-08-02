@@ -4,12 +4,10 @@
 
 <mapper namespace="mapper.board">
 
-	
- 
 	<select id="list" resultType="boardVO">
 		<![CDATA[
 		select 
-		level, 
+		level lv, 
 		articleNO, 
 		parentNO, 
 		LPAD(' ', 4*(LEVEL-1)) || title title,
@@ -20,6 +18,30 @@
 		start with parentNO=0
 		CONNECT BY PRIOR articleNO = parentNO
 		ORDER SIBLINGS BY articleNO DESC
+		]]>
+	</select>
+	 
+	<select id="listPaging" resultType="boardVO" parameterType="pageVO">
+		<![CDATA[
+select lv, articleNO, parentNO, LPAD(' ', 4*(lv-1)) || title title, content , writeDate, id
+from
+    (
+    select 
+    rownum rn,
+    level lv, 
+    articleNO, 
+    parentNO, 
+    LPAD(' ', 4*(LEVEL-1)) || title title,
+    content,
+    writeDate,
+    id
+    from board
+    where rownum<=#{pageNum} * #{amount}
+    start with parentNO=0
+    CONNECT BY PRIOR articleNO = parentNO
+    ORDER SIBLINGS BY articleNO DESC
+)
+where rn> (#{pageNum}-1)*#{amount}
 		]]>
 	</select>
 	
@@ -43,8 +65,31 @@
 		<![CDATA[delete from board where articleNO=#{articleNO}]]>
 	</delete>
 	
-	<select id="maxArticleNO" resultType="int">
+	<select id="total" resultType="int">
 		<![CDATA[select max(articleNO) from board]]>
+	</select>
+	
+	<select id="count" resultType="int">
+		<![CDATA[
+		select count(*) 
+from
+(
+select 
+level lv, 
+articleNO, 
+parentNO, 
+LPAD(' ', 4*(LEVEL-1)) || title title,
+content,
+writeDate,
+id
+from board
+start with parentNO=0
+CONNECT BY PRIOR articleNO = parentNO
+ORDER SIBLINGS BY articleNO DESC
+)
+
+		]]>
+		
 	</select>
 	
 </mapper>

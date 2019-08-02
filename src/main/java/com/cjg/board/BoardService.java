@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cjg.vo.BoardVO;
+import com.cjg.vo.PageVO;
 
 @Service("boardService")
 public class BoardService {
@@ -17,6 +18,11 @@ public class BoardService {
 	
 	public  List<BoardVO> list() throws Exception{
 		return boardDAO.list();
+		
+	}
+	
+	public  List<BoardVO> list(PageVO pageVO) throws Exception{
+		return boardDAO.list(pageVO);
 		
 	}
 	
@@ -38,6 +44,10 @@ public class BoardService {
 	
 	public int del(int articleNO) throws Exception{
 		return boardDAO.del(articleNO);
+	}
+	 
+	public int count() throws Exception{
+		return boardDAO.count();
 	}
 	
 }

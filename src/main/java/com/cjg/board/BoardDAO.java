@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cjg.vo.BoardVO;
+import com.cjg.vo.PageVO;
 import com.cjg.vo.UploadFileVO;
 
 @Repository("boardDAO")
@@ -21,6 +22,10 @@ public class BoardDAO {
 		return sqlSession.selectList("mapper.board.list");
 	}
 	
+	public List<BoardVO> list(PageVO pageVO){
+		return sqlSession.selectList("mapper.board.listPaging", pageVO);
+	}	
+	
 	public int create(BoardVO boardVO) throws Exception{
 		return sqlSession.insert("mapper.board.create", boardVO);
 	}
@@ -32,10 +37,11 @@ public class BoardDAO {
 		
 		List<UploadFileVO> list = boardVO.getFileList();
 		
-		System.out.println(list.toString());
+		//System.out.println(list.toString());
 		
 		
-		
+		if(list!=null)
+		{
 		list.forEach(uploadFile->{
 			
 			int articleNO = sqlSession.selectOne("mapper.board.maxArticleNO");
@@ -45,6 +51,7 @@ public class BoardDAO {
 			System.out.println(uploadFile.toString());
 			sqlSession.insert("mapper.file.insert", uploadFile);
 		});
+		}
 		
 		return result;
 	}
@@ -82,6 +89,11 @@ public class BoardDAO {
 		return result2;
 		
 		
+	}
+	
+	public int count() throws Exception{
+		
+		return (int)sqlSession.selectOne("mapper.board.count");
 	}
 
 }

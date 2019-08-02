@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cjg.vo.BoardVO;
 import com.cjg.vo.MemberVO;
+import com.cjg.vo.PageVO;
 import com.cjg.vo.UploadFileVO;
 
 
@@ -41,6 +42,9 @@ public class BoardController {
 	
 	@Autowired
 	UploadFileVO uploadFileVO; 
+	
+	@Autowired
+	PageVO pageVO;
 
 	@RequestMapping(value="/list.do", method=RequestMethod.GET)
 	public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -48,6 +52,25 @@ public class BoardController {
 		
 		ModelAndView mav = new ModelAndView("boardlist");
 		mav.addObject("list", list);
+		return mav;
+	}
+	
+	@RequestMapping(value="/listPaging.do", method=RequestMethod.GET)
+	public ModelAndView listPaging(PageVO pageVO, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		
+		
+		
+		List<BoardVO> list = boardService.list(pageVO);
+		int count = boardService.count(); 
+		pageVO.setTotal(count);
+		
+		pageVO.process();
+		
+		System.out.println(pageVO.toString());
+		
+		ModelAndView mav = new ModelAndView("boardlist");
+		mav.addObject("list", list);
+		mav.addObject("pageVO", pageVO);
 		return mav;
 	}
 	
@@ -76,7 +99,7 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Enumeration enu =multipartRequest.getParameterNames();
 		
-		System.out.println(boardVO.getFileList().toString());
+		//System.out.println(boardVO.getFileList().toString());
 		
 		while(enu.hasMoreElements()){
 			

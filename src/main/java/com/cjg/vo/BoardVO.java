@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BoardVO {
 	
-	private int level;
+	private int lv;
 	private int articleNO;
 	private int parentNO;
 	private String title;
@@ -25,11 +25,16 @@ public class BoardVO {
 	public void setFileList(List<UploadFileVO> fileList) {
 		this.fileList = fileList;
 	}
-	public int getLevel() {
-		return level;
+
+	
+	
+	
+
+	public int getLv() {
+		return lv;
 	}
-	public void setLevel(int level) {
-		this.level = level;
+	public void setLv(int lv) {
+		this.lv = lv;
 	}
 	public int getArticleNO() {
 		return articleNO;
