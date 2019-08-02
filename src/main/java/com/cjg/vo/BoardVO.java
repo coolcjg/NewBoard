@@ -1,6 +1,7 @@
 package com.cjg.vo;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,15 @@ public class BoardVO {
 	private Date writeDate;
 	private String id;
 	
+	private List<UploadFileVO> fileList;
 	
+	
+	public List<UploadFileVO> getFileList() {
+		return fileList;
+	}
+	public void setFileList(List<UploadFileVO> fileList) {
+		this.fileList = fileList;
+	}
 	public int getLevel() {
 		return level;
 	}

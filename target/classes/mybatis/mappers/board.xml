@@ -3,6 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.board">
+
+	
  
 	<select id="list" resultType="boardVO">
 		<![CDATA[
@@ -24,6 +26,10 @@
 	<insert id="create" parameterType="boardVO">
 		<![CDATA[insert into board(articleNO, parentNO, title, content, writeDate, id) values(seq_board.nextval, #{parentNO}, #{title}, #{content}, SYSDATE, #{id})]]>
 	</insert>
+	
+	<insert id="createByMap" parameterType="java.util.Map">
+		<![CDATA[insert into board(articleNO, parentNO, title, content, writeDate, id) values(seq_board.nextval, #{parentNO}, #{title}, #{content}, SYSDATE, #{id})]]>
+	</insert>
 	 
 	<select id="read" parameterType="int" resultType="boardVO">
 		<![CDATA[select * from board where articleNO=#{articleNO}]]>
@@ -36,6 +42,10 @@
 	<delete id="del" parameterType="int">
 		<![CDATA[delete from board where articleNO=#{articleNO}]]>
 	</delete>
+	
+	<select id="maxArticleNO" resultType="int">
+		<![CDATA[select max(articleNO) from board]]>
+	</select>
 	
 </mapper>
 

@@ -9,4 +9,20 @@
 		<![CDATA[select max(articleNO) FROM BOARD]]>
 	</select>
 	
+	<insert id="insert" parameterType="uploadVO">
+		<![CDATA[insert into uploadfile(uuid, uploadPath, fileName, fileType, articleNO, writeDate) values(#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{articleNO}, sysdate)]]>
+	</insert>
+	
+	<select id="list" resultType="uploadVO" parameterType="int">
+		<![CDATA[select * from uploadfile where articleNO=#{articleNO} ]]>
+	</select>
+	
+	<select id="download" resultType="uploadVO" parameterType="String">
+		<![CDATA[select * from uploadfile where fileName=#{}]]>
+	</select>
+	
+	<delete id="deleteAll" parameterType="int">
+		<![CDATA[delete from uploadfile where articleNO=#{articleNO}]]>
+	</delete>
+	
 </mapper>

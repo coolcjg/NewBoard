@@ -12,14 +12,27 @@
 		<script>
 			$(document).ready(function(){
 				
-				console.log("${member.id}");
-				console.log("${boardVO.id}");
-			
+				
+				//파일 다운로드
+				$("#fileList").on("click","li", function(e){
+					
+					var li = $(this);
+					
+					var path = encodeURIComponent(li.data("uploadpath")+"/"+li.data("uuid")+"_"+li.data("filename"));
+					
+					self.location="${contextPath}/file/download.do?path="+path;
+					
+				});
+				
+				
+				
+				//글수정
 				$("#boardMod").click(function(e){
 					e.preventDefault();
 					location.href='${contextPath}/board/mod/${boardVO.articleNO}';
 				});
 				
+				//글삭제
 				$("#boardDel").click(function(e){
 					e.preventDefault();
 					var flag = confirm('삭제하시겠습니까?');
@@ -33,11 +46,69 @@
 					}
 				});
 				
+				//답글달기
 				$("#rep").click(function(e){
 					e.preventDefault();
 					location.href='${contextPath}/board/create.do?parentNO=${boardVO.articleNO}';		
 				});
-			})
+				
+				console.log('${boardVO.articleNO}');
+				
+				
+				//첨부파일 가져오기(function함수쓸때 }뒤에 () 까먹지 않기
+				(function(){
+					
+				 	var uploadDiv = $("#fileList");
+					console.log('${boardVO.articleNO}');
+					
+					$.getJSON("${contextPath}/file/list.do", {articleNO : '${boardVO.articleNO}'}, function(arr){
+						
+						var str="";
+						
+						
+						
+						$(arr).each(function(i, attach){
+							
+							console.log(arr);
+							
+							if(attach.fileType.search('image') !=-1){
+								var path = encodeURIComponent(attach.uploadPath+"\\"+attach.uuid+"_"+attach.fileName);
+
+								console.log(path);
+								str="";
+								str+="<li data-uploadPath='"+attach.uploadPath;
+								str+="' data-uuid='"+attach.uuid;
+								str+="' data-fileName='"+attach.fileName;
+								str+="' data-fileType='"+attach.fileType+"'>";
+								str+="<a href='#'><img style='height:100px; width:100px;' src='${contextPath}/file/showImage.do?path="+path+"'>";
+								str+="</a></li>";
+								uploadDiv.append(str);
+								
+							}else{
+								str="";
+								str="<li data-uploadPath='"+attach.uploadPath;
+								str+="' data-uuid='"+attach.uuid;
+								str+="' data-fileName='"+attach.fileName;
+								str+="' data-fileType='"+attach.fileType+"'>";
+								str+="<a href='#'><img src='${contextPath}/resources/doc.jpg'></a></li>"
+								uploadDiv.append(str);
+							}
+						
+						});
+
+					});
+
+				}());
+
+			});
+		</script>
+			
+			
+			
+		<script>
+			
+			
+		
 		</script>
 	
 	</head>
@@ -60,6 +131,18 @@
 					<td>내용</td>
 					<td>${boardVO.content}</td>
 				</tr>
+				
+				
+				
+				<tr>
+					<td>파일 업로드 결과</td>
+					<td>
+						<ul id="fileList">
+						
+						</ul>
+					</td>
+				</tr>				
+				
 				
 				<tr>
 					<td>

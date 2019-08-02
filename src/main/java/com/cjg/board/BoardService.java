@@ -1,6 +1,7 @@
 package com.cjg.board;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class BoardService {
 	
 	public int create(BoardVO boardVO) throws Exception{
 		return boardDAO.create(boardVO);
+	}
+	
+	public int create(Map<String, Object> map, BoardVO boardVO)throws Exception{
+		return boardDAO.create(map, boardVO);
 	}
 	
 	public BoardVO read(int articleNO) throws Exception{

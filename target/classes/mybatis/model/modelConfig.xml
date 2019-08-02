@@ -5,5 +5,6 @@
 	<typeAliases>
 		<typeAlias type="com.cjg.vo.MemberVO" alias="memberVO"/>
 		<typeAlias type="com.cjg.vo.BoardVO" alias="boardVO"/>
+		<typeAlias type="com.cjg.vo.UploadFileVO" alias="uploadVO"/>
 	</typeAliases>
 </configuration>

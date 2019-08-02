@@ -2,7 +2,10 @@ package com.cjg.vo;
 
 import java.sql.Date;
 
-public class uploadFileVO {
+import org.springframework.stereotype.Component;
+
+@Component
+public class UploadFileVO {
 	
 	String uuid;
 	String uploadPath;
