@@ -14,11 +14,8 @@ public class FileDAO {
 	@Autowired
 	SqlSession sqlSession;
 	
-	
 	public int maxArticleNO() throws Exception{
-		
 		return (int)sqlSession.selectOne("mapper.file.maxArticleNO");
-		
 	}
 	
 	public List<UploadFileVO> list(int articleNO) throws Exception{

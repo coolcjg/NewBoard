@@ -42,7 +42,6 @@ public class FileController {
 	@RequestMapping(value="/fileUpload.do", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<List<UploadFileVO>> fileUpload(MultipartFile[] uploadFile, HttpServletResponse response) throws Exception{
 		
-		
 		//게시판 새 글 번호 가져오기.
 		int newArticleNO = fileService.maxArticleNO();
 		newArticleNO++;
@@ -62,7 +61,6 @@ public class FileController {
 		if(!uploadPath.exists())
 			uploadPath.mkdirs();
 		
-		
 		for(MultipartFile multipartFile : uploadFile){
 			
 			UploadFileVO uploadfile = new UploadFileVO();
@@ -72,7 +70,6 @@ public class FileController {
 			String fileType = multipartFile.getContentType();
 			UUID uuid = UUID.randomUUID();
 			
-			
 			try{
 				File saveFile = new File(uploadPath, uuid.toString()+"_"+uploadFileName);
 				multipartFile.transferTo(saveFile);
@@ -80,7 +77,6 @@ public class FileController {
 			}catch(Exception e){
 				e.getMessage();
 			}
-			
 			
 			uploadfile.setArticleNO(newArticleNO);
 			uploadfile.setFileName(uploadFileName);
@@ -92,39 +88,30 @@ public class FileController {
 		}
 		
 		return new ResponseEntity<>(list, HttpStatus.OK);
-		
-
 	}
-	
 	
 	//이미지보여주기
 	@RequestMapping(value="/showImage.do", method=RequestMethod.GET)
 	public ResponseEntity<byte[]> showImage(String path){
-			System.out.println("path : " + path);
-			File file = new File(path);
-			byte[] byteArray=null;
-			String type=null;
 			
-			try{
+		File file = new File(path);
+		byte[] byteArray=null;
+		String type=null;
+		
+		try{
 			byteArray = FileCopyUtils.copyToByteArray(file);
 			type=Files.probeContentType(file.toPath());
-			}catch(Exception e){
-				e.printStackTrace();
-			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 			
-			
-			HttpHeaders header = new HttpHeaders();
-			
-			
-			header.add("Content-Type", type);
-	
+		HttpHeaders header = new HttpHeaders();
+		header.add("Content-Type", type);
 
-		
 		ResponseEntity<byte[]> res = new ResponseEntity<>(byteArray, header, HttpStatus.OK);
 		
 		return res;
-		
-		
+
 	}
 	
 	//파일삭제
@@ -152,7 +139,7 @@ public class FileController {
 	@ResponseBody
 	public ResponseEntity<List<UploadFileVO>> list(int articleNO) throws Exception{
 		List<UploadFileVO> list = fileService.list(articleNO);
-		return new ResponseEntity(list, HttpStatus.OK);
+		return new ResponseEntity<List<UploadFileVO>>(list, HttpStatus.OK);
 	}
 
 	//파일다운로드
@@ -167,32 +154,20 @@ public class FileController {
 		}
 		
 		String fileName = resource.getFilename();
-		
-		
-		
+
 		String downloadName = fileName.substring(fileName.indexOf("_")+1);
-		
 		
 		//다운로드파일이름이 이상하게 나오지 않게 바이트코드로 바꿔준다.
 		String newDownloadName = new String(downloadName.getBytes("UTF-8"), "ISO-8859-1");
-		
 		
 		HttpHeaders headers = new HttpHeaders();
 		
 		headers.add("Content-Disposition", "attachment; filename="+newDownloadName);
 		
-		
-		
 		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);		
 		
 	}
-	
-	
-	
-	
-	
 
-	
 	private String makeFolder(){
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -205,9 +180,4 @@ public class FileController {
 		return dateString.replace("-", File.separator);
 		
 	}
-	
-	
-	
-	
-
 }

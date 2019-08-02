@@ -169,75 +169,62 @@
 			}());
 			//
 			
-		//파일업로드 파일체크
-		var regex = new RegExp("(.*?)\.(exe|zip|alz)$");
-		var maxSize = 1024*1024*10; //10MB
-		
-		function checkExtension(name, size){
-			if(regex.test(name)){
-				alert("해당 확장자는 업로드할 수 없습니다.");
-				return false;
-			}
+			//파일업로드 파일체크
+			var regex = new RegExp("(.*?)\.(exe|zip|alz)$");
+			var maxSize = 1024*1024*10; //10MB
 			
-			if(size>maxSize){
-				alert("해당 파일은 용량초과(10MB)로 업로드할 수 없습니다.");
-				return false;
-			}
-			return true;
-		};
-		
-		//업로드파일 화면에 표시
-		function showUploadFile(result){
-			
-			var uploadDiv = $("#fileList");
-			
-			for(var i=0; i<result.length; i++){
-				console.log("쇼업로드");
-				var path = encodeURIComponent(result[i].uploadPath+"/"+result[i].uuid+"_"+result[i].fileName);
-				var str="";
+			function checkExtension(name, size){
+				if(regex.test(name)){
+					alert("해당 확장자는 업로드할 수 없습니다.");
+					return false;
+				}
 				
+				if(size>maxSize){
+					alert("해당 파일은 용량초과(10MB)로 업로드할 수 없습니다.");
+					return false;
+				}
+				return true;
+			};
+			
+			//업로드파일 화면에 표시
+			function showUploadFile(result){
 				
-				if(result[i].fileType.match('image')){
+				var uploadDiv = $("#fileList");
+				
+				for(var i=0; i<result.length; i++){
+					console.log("쇼업로드");
+					var path = encodeURIComponent(result[i].uploadPath+"/"+result[i].uuid+"_"+result[i].fileName);
+					var str="";
 					
-					str+="<li data-uploadPath='"+result[i].uploadPath;
-					str+="' data-uuid='"+result[i].uuid;
-					str+="' data-fileName='"+result[i].fileName;
-					str+="' data-fileType='"+result[i].fileType+"'>";
-					str+="<a href='#'><img style='height:100px; width:100px;' src='${contextPath}/file/showImage.do?path="+path+"'>";
-					str+="<button type='button' data-file='"+path+"'>x</button>"
-					str+="</a></li>";
-					uploadDiv.append(str);
-
-				}else{
 					
-					str="<li data-uploadPath='"+result[i].uploadPath;
-					str+="' data-uuid='"+result[i].uuid;
-					str+="' data-fileName='"+result[i].fileName;
-					str+="' data-fileType='"+result[i].fileType+"'>";
-					str+="<a href='#'><img src='${contextPath}/resources/doc.jpg'><button type='button' data-file='"+path+"'>x</button></a></li>"
-					uploadDiv.append(str);
+					if(result[i].fileType.match('image')){
+						
+						str+="<li data-uploadPath='"+result[i].uploadPath;
+						str+="' data-uuid='"+result[i].uuid;
+						str+="' data-fileName='"+result[i].fileName;
+						str+="' data-fileType='"+result[i].fileType+"'>";
+						str+="<a href='#'><img style='height:100px; width:100px;' src='${contextPath}/file/showImage.do?path="+path+"'>";
+						str+="<button type='button' data-file='"+path+"'>x</button>"
+						str+="</a></li>";
+						uploadDiv.append(str);
+	
+					}else{
+						
+						str="<li data-uploadPath='"+result[i].uploadPath;
+						str+="' data-uuid='"+result[i].uuid;
+						str+="' data-fileName='"+result[i].fileName;
+						str+="' data-fileType='"+result[i].fileType+"'>";
+						str+="<a href='#'><img src='${contextPath}/resources/doc.jpg'><button type='button' data-file='"+path+"'>x</button></a></li>"
+						uploadDiv.append(str);
+					}
 				}
 			}
-		}
-		//
-		
-		
-		
+			//
 			
+		});//document
+
 			
-			
-			
-		});
-		
-		
-		
 		</script>
-		
-		<script>
-		
-		
-		</script>
-		
 		
 	</head>
 	

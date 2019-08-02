@@ -17,7 +17,6 @@ public class MemberService {
 	@Autowired
 	MemberVO member;
 
-	
 	public List<MemberVO> memberList() throws Exception{
 		List<MemberVO> list = memberDAO.memberList(); 	
 		return list;

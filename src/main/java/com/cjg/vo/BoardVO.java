@@ -26,10 +26,6 @@ public class BoardVO {
 		this.fileList = fileList;
 	}
 
-	
-	
-	
-
 	public int getLv() {
 		return lv;
 	}

@@ -102,15 +102,7 @@
 
 			});
 		</script>
-			
-			
-			
-		<script>
-			
-			
 		
-		</script>
-	
 	</head>
 
 	<body>
@@ -132,13 +124,10 @@
 					<td>${boardVO.content}</td>
 				</tr>
 				
-				
-				
 				<tr>
 					<td>파일 업로드 결과</td>
 					<td>
 						<ul id="fileList">
-						
 						</ul>
 					</td>
 				</tr>				

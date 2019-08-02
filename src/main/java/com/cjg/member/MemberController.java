@@ -71,8 +71,6 @@ public class MemberController {
 		int result=0;
 		result = memberService.addMember(member);
 		
-		System.out.println(result);
-		
 		ModelAndView mav = new ModelAndView("redirect:/member/list.do");
 		return mav;
 	}
@@ -95,8 +93,7 @@ public class MemberController {
 		member = memberService.login(member1);
 		
 		String returnURI = (String)request.getSession().getAttribute("redirectURI");
-		System.out.println(returnURI);
-		
+				
 		HttpSession session = request.getSession();
 				
 		if(member !=null){
