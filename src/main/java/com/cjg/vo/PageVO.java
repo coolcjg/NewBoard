@@ -29,7 +29,7 @@ public class PageVO {
 	public PageVO(){
 		this.pageNum=1;
 		this.startPage=1;
-		this.amount=10;
+		this.amount=20;
 	}
 
 	public PageVO(int pageNum, int amount, String type, String keyword, int total){
