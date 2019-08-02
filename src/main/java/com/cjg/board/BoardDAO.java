@@ -37,20 +37,16 @@ public class BoardDAO {
 		
 		List<UploadFileVO> list = boardVO.getFileList();
 		
-		//System.out.println(list.toString());
-		
-		
 		if(list!=null)
 		{
-		list.forEach(uploadFile->{
-			
-			int articleNO = sqlSession.selectOne("mapper.board.maxArticleNO");
-			
-			uploadFile.setArticleNO(articleNO);
-			
-			System.out.println(uploadFile.toString());
-			sqlSession.insert("mapper.file.insert", uploadFile);
-		});
+			list.forEach(uploadFile->{
+				
+				int articleNO = sqlSession.selectOne("mapper.board.maxArticleNO");
+				
+				uploadFile.setArticleNO(articleNO);
+
+				sqlSession.insert("mapper.file.insert", uploadFile);
+			});
 		}
 		
 		return result;
@@ -64,10 +60,9 @@ public class BoardDAO {
 		int result = sqlSession.update("mapper.board.mod", boardVO);
 		
 		int articleNO = boardVO.getArticleNO();
-		System.out.println("BOARD : " + articleNO);
+		
 		sqlSession.delete("mapper.file.deleteAll", articleNO );
-		
-		
+				
 		List<UploadFileVO> fileList = boardVO.getFileList();
 		
 		if(fileList != null){
@@ -87,13 +82,12 @@ public class BoardDAO {
 		int result2 = sqlSession.delete("mapper.board.del", articleNO);
 		
 		return result2;
-		
-		
+
 	}
 	
-	public int count() throws Exception{
-		
-		return (int)sqlSession.selectOne("mapper.board.count");
+	public int count(PageVO pageVO) throws Exception{
+	
+		return (int)sqlSession.selectOne("mapper.board.count", pageVO);
 	}
 
 }

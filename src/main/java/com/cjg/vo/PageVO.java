@@ -17,6 +17,9 @@ public class PageVO {
 	private int total;
 	
 	
+	public String[] getTypeArr(){
+		return type == null? new String[]{} : type.split("");
+	}
 	
 
 	@Override

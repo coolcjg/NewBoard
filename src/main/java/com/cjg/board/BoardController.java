@@ -25,8 +25,6 @@ import com.cjg.vo.MemberVO;
 import com.cjg.vo.PageVO;
 import com.cjg.vo.UploadFileVO;
 
-
-
 @Controller("boardController")
 @RequestMapping("/board")
 public class BoardController {
@@ -58,15 +56,13 @@ public class BoardController {
 	@RequestMapping(value="/listPaging.do", method=RequestMethod.GET)
 	public ModelAndView listPaging(PageVO pageVO, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		
-		
-		
 		List<BoardVO> list = boardService.list(pageVO);
-		int count = boardService.count(); 
+		int count = boardService.count(pageVO); 
 		pageVO.setTotal(count);
 		
-		pageVO.process();
 		
-		System.out.println(pageVO.toString());
+		//첫페이지,마지막페이지 계산함수
+		pageVO.process();
 		
 		ModelAndView mav = new ModelAndView("boardlist");
 		mav.addObject("list", list);
@@ -99,13 +95,8 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Enumeration enu =multipartRequest.getParameterNames();
 		
-		//System.out.println(boardVO.getFileList().toString());
-		
 		while(enu.hasMoreElements()){
-			
 			String parameterName = (String)enu.nextElement();
-			//System.out.println("parameterName : " + parameterName + ", value : " + (String)multipartRequest.getParameter(parameterName));
-			
 			map.put(parameterName, multipartRequest.getParameter(parameterName));
 		}
 		
@@ -124,14 +115,14 @@ public class BoardController {
 		if(result ==1){
 			msg="<script>";
 			msg+="alert('글작성 완료');";
-			msg+="location.href='list.do';";
+			msg+="location.href='listPaging.do';";
 			msg+="</script>";
 			
 			res = new ResponseEntity<String>(msg, headers, HttpStatus.OK);
 		}else{
 			msg="<script>";
 			msg+="alert('글작성 에러');";
-			msg+="location.href='list.do';";
+			msg+="location.href='listPaging.do';";
 			msg+="</script>";
 			
 			res = new ResponseEntity<String>(msg, headers, HttpStatus.OK);
@@ -163,25 +154,8 @@ public class BoardController {
 	public ModelAndView modProcess(BoardVO boardVO, MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception{
 		multipartRequest.setCharacterEncoding("utf-8");
 		
-		
-		/*
-		boardVO.getFileList().forEach(
-				attach->{System.out.println("수정 프로세스 : " + attach.toString());}
-		);
-		*/
-		
 		int result = boardService.mod(boardVO);
-		
-		/*
-		if(result ==1){
-			ModelAndView mav = new ModelAndView("redirect:/board/list.do");
-			return mav;
-			
-		}else{
-			ModelAndView mav = new ModelAndView("redirect:/board/list.do");
-			return mav;
-		}
-		*/
+
 		int articleNO = boardVO.getArticleNO();
 		ModelAndView mav = new ModelAndView("redirect:/board/read/"+articleNO);
 		return mav;
@@ -192,13 +166,10 @@ public class BoardController {
 	@RequestMapping(value="del/{articleNO}", method=RequestMethod.GET)
 	public ModelAndView del(@PathVariable int articleNO, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		
-		
-		 
 		boardService.del(articleNO);
 		
-		ModelAndView mav = new ModelAndView("redirect:/board/list.do");
+		ModelAndView mav = new ModelAndView("redirect:/board/listPaging.do");
 		
 		return mav;
-
 	}
 }

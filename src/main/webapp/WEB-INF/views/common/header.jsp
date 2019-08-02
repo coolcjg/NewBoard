@@ -18,7 +18,7 @@
 	</c:otherwise>
 </c:choose>
 
-<a href="${contextPath}/board/list.do">게시글 보러가기</a>
+<a href="${contextPath}/board/listPaging.do">게시글 보러가기</a>
 <a href="${contextPath}/member/list.do">회원리스트</a>
 
 <hr>

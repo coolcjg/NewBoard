@@ -46,8 +46,8 @@ public class BoardService {
 		return boardDAO.del(articleNO);
 	}
 	 
-	public int count() throws Exception{
-		return boardDAO.count();
+	public int count(PageVO pageVO) throws Exception{
+		return boardDAO.count(pageVO);
 	}
 	
 }
