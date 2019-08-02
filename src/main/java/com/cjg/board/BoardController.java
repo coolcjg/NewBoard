@@ -76,6 +76,8 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Enumeration enu =multipartRequest.getParameterNames();
 		
+		System.out.println(boardVO.getFileList().toString());
+		
 		while(enu.hasMoreElements()){
 			
 			String parameterName = (String)enu.nextElement();
@@ -135,16 +137,19 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/modProcess.do", method=RequestMethod.POST)
-	public ModelAndView modProcess(BoardVO boardVO, HttpServletRequest request, HttpServletResponse response) throws Exception{
-		request.setCharacterEncoding("utf-8");
+	public ModelAndView modProcess(BoardVO boardVO, MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception{
+		multipartRequest.setCharacterEncoding("utf-8");
 		
+		
+		/*
 		boardVO.getFileList().forEach(
 				attach->{System.out.println("수정 프로세스 : " + attach.toString());}
 		);
-
+		*/
+		
 		int result = boardService.mod(boardVO);
 		
-
+		/*
 		if(result ==1){
 			ModelAndView mav = new ModelAndView("redirect:/board/list.do");
 			return mav;
@@ -153,6 +158,12 @@ public class BoardController {
 			ModelAndView mav = new ModelAndView("redirect:/board/list.do");
 			return mav;
 		}
+		*/
+		int articleNO = boardVO.getArticleNO();
+		ModelAndView mav = new ModelAndView("redirect:/board/read/"+articleNO);
+		return mav;
+		
+		
 	}
 	
 	@RequestMapping(value="del/{articleNO}", method=RequestMethod.GET)

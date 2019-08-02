@@ -60,11 +60,15 @@ public class BoardDAO {
 		System.out.println("BOARD : " + articleNO);
 		sqlSession.delete("mapper.file.deleteAll", articleNO );
 		
+		
 		List<UploadFileVO> fileList = boardVO.getFileList();
 		
-		fileList.forEach(file->{
-			sqlSession.insert("mapper.file.insert", file);
-		});
+		if(fileList != null){
+			fileList.forEach(file->{
+				file.setArticleNO(articleNO);
+				sqlSession.insert("mapper.file.insert", file);
+			});
+		}
 		
 		return result;
 	}

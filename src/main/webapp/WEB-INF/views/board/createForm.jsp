@@ -49,11 +49,6 @@
 					formObj.submit();
 				});				
 				
-				
-				
-				
-				
-				
 				//파일 삭제
 				$("#fileList").on("click", "button", function(e){
 					var targetFile =$(this).data("file");
@@ -72,9 +67,12 @@
 					});
 				});
 				
+				
+				
 				//파일업로드버튼이 변경이 발생했을 때 파일 업로드
-
+				
 				$("#fileUpload").change(function(e){
+							
 					
 					var formData = new FormData();
 					
@@ -107,10 +105,16 @@
 						success:function(result){
 							console.log(result);
 							showUploadFile(result);
+							
+							
 						}
 					});
 				});
-			});
+				
+				
+			});//$(document) 끝
+			
+			
 			
 			
 			

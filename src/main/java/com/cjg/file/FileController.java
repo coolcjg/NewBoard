@@ -131,14 +131,11 @@ public class FileController {
 	@RequestMapping(value="/deleteFile.do", method=RequestMethod.POST)
 	public ResponseEntity<String> deleteFile(String targetFile){
 		File file;
-		System.out.println("deleteFile.do에서의 디코딩 전 targetFile="+targetFile);
 		
 		try{
 			String decodedTargetFile = URLDecoder.decode(targetFile, "UTF-8");
-			System.out.println("deleteFile.do에서의 디코딩 후 targetFile="+decodedTargetFile);
 			
 			file = new File(decodedTargetFile);
-			
 			file.delete();
 			
 		}catch(UnsupportedEncodingException e){
@@ -155,7 +152,6 @@ public class FileController {
 	@ResponseBody
 	public ResponseEntity<List<UploadFileVO>> list(int articleNO) throws Exception{
 		List<UploadFileVO> list = fileService.list(articleNO);
-		System.out.println("컨트롤러에서 파일 값 = " +list.toString());
 		return new ResponseEntity(list, HttpStatus.OK);
 	}
 
